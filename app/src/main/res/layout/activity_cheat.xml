@@ -21,5 +21,4 @@
         android:layout_height="wrap_content"
         android:text="@string/show_answer_button"
         android:id="@+id/showAnswerButton"/>
-
 </LinearLayout>
