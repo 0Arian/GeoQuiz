@@ -20,6 +20,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_oceans, true),
@@ -34,7 +35,7 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreaste(Bundle) is called");
+        Log.d(TAG, "onCreate(Bundle) is called");
         setContentView(R.layout.activity_quiz);
 
 
@@ -75,7 +76,7 @@ public class QuizActivity extends AppCompatActivity {
         mPrevButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                mCurrentIndex = mCurrentIndex - 1;
+                mCurrentIndex = Math.abs(mCurrentIndex - 1) & mQuestionBank.length;
                 updateQuestion();
             }
         });
@@ -85,8 +86,9 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 //Start CheatActivity
-                Intent i = new Intent(QuizActivity.this, CheatActivity.class);
-                startActivity(i);
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent i = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivityForResult(i, REQUEST_CODE_CHEAT);
             }
         });
         if (savedInstanceState != null){
